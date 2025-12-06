@@ -1,0 +1,46 @@
+# Ignore OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Ignore dependencies managed by package managers
+vendor/
+node_modules/
+package-lock.json
+composer.lock
+
+# Ignore log files
+*.log
+
+# Ignore database files
+*.sql
+
+# Ignore environment/config files (create them from .example files)
+.env
+wp-config-local.php
+
+# Ignore built/compiled assets
+# /assets/css/*.css
+# /assets/css/*.css.map
+# /assets/js/*.js
+# /assets/js/*.js.map
+# !assets/css/source/
+# !assets/js/source/
+
+# Ignore the final distribution ZIP (we'll build it)
+*.zip
+*.tar.gz
+
+# Ignore IDE specific files
+.idea/
+*.swp
+*.swo
+*~
+
+# Ignore build directories
+build/
+dist/
