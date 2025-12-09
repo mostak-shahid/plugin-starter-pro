@@ -8,6 +8,7 @@ ehthumbs.db
 Thumbs.db
 
 # Ignore dependencies managed by package managers
+release/
 vendor/
 node_modules/
 package-lock.json

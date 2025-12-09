@@ -1,0 +1,28 @@
+{
+  "name": "mospress/plugin-starter-pro",
+  "description": "Plugin boilerplate for WordPress",
+  "type": "wordpress-plugin",
+  "license": "GPLv2",
+  "autoload": {
+    "psr-4": {
+      "MosPress\\PluginStarterPro\\": "php/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Md. Mostak Shahid",
+      "email": "mostak.shahid@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require-dev": {
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+
+  "require": {}
+}
