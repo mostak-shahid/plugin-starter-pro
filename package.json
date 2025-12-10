@@ -1,7 +1,7 @@
 {
   "name": "authpress-pro",
   "version": "1.0.0",
-  "description": "Test plugin boilerplate for WordPress",
+  "description": "Plugin boilerplate for WordPress",
   "author": "Md. Mostak Shahid",
   "license": "GPL-2.0-or-later",
   "scripts": {

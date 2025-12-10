@@ -29,7 +29,7 @@ module.exports = {
         filename: "pluginstarterprocomponents.js",
         exposes: {
             "./LoginForm": "./src/components/LoginForm.js",
-            "./MenuItems": "./src/menu/menuItems.js",
+            "./MenuItems": "./src/data/menuItems.js",
         },
         shared: {
             react: { singleton: true, requiredVersion: false },
