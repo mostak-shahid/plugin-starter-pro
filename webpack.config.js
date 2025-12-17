@@ -18,23 +18,23 @@ module.exports = {
             loader: "babel-loader",
             exclude: /node_modules/,
             options: {
-            presets: ["@babel/preset-react", "@babel/preset-env"]
+                presets: ["@babel/preset-react", "@babel/preset-env"]
             }
         }
         ]
     },
     plugins: [
         new ModuleFederationPlugin({
-        name: "pluginstarterpro",
-        filename: "pluginstarterprocomponents.js",
-        exposes: {
-            "./LoginForm": "./src/components/LoginForm.js",
-            "./MenuItems": "./src/data/menuItems.js",
-        },
-        shared: {
-            react: { singleton: true, requiredVersion: false },
-            "react-dom": { singleton: true, requiredVersion: false },
-        }
+            name: "pluginstarterpro",
+            filename: "pluginstarterprocomponents.js",
+            exposes: {
+                "./LoginForm": "./src/components/LoginForm.js",
+                "./MenuItems": "./src/data/menuItems.js",
+            },
+            shared: {
+                react: { singleton: true, requiredVersion: false },
+                "react-dom": { singleton: true, requiredVersion: false },
+            }
         }),
     ]
 };
