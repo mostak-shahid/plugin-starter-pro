@@ -29,6 +29,7 @@ module.exports = {
             filename: "pluginstarterprocomponents.js",
             exposes: {
                 "./LoginForm": "./src/components/LoginForm.js",
+                "./RegistrationForm": "./src/components/RegistrationForm.js",
                 "./MenuItems": "./src/data/menuItems.js",
             },
             shared: {
