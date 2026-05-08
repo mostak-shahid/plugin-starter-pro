@@ -23,6 +23,11 @@ module.exports = {
         }
         ]
     },
+    externals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM',
+        '@wordpress/element': ['wp', 'element'],
+    },
     plugins: [
         new ModuleFederationPlugin({
             name: "pluginstarterpro",
@@ -30,11 +35,13 @@ module.exports = {
             exposes: {
                 "./LoginForm": "./src/components/LoginForm.js",
                 "./RegistrationForm": "./src/components/RegistrationForm.js",
+                "./NewsSideSheet": "./src/components/NewsSideSheet.js",
                 "./MenuItems": "./src/data/menuItems.js",
             },
             shared: {
-                react: { singleton: true, requiredVersion: false },
-                "react-dom": { singleton: true, requiredVersion: false },
+                react: { singleton: true, requiredVersion: false, eager: false },
+                "react-dom": { singleton: true, requiredVersion: false, eager: false },
+                "@wordpress/element": { singleton: true, requiredVersion: false, eager: false },
             }
         }),
     ]

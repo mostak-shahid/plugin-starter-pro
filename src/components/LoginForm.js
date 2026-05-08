@@ -1,6 +1,8 @@
-import React from "react";
-
+import React, { useState, useEffect, Suspense  } from 'react';
 export default function LoginForm({settingData}) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     return (
         <div style={{ padding: 20, border: '1px solid #ddd' }}>
             {/* {console.log('settingData in LoginForm', settingData)} */}
