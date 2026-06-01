@@ -1,0 +1,15 @@
+{
+  "name": "plugin-starter-pro",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "wp-scripts build src/index-pro.js --output-path=build",
+    "start": "wp-scripts start src/index-pro.js --output-path=build"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^32.3.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "react-bootstrap": "^2.10.10"
+  }
+}
