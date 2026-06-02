@@ -78,3 +78,31 @@ export default function ContactForm() {
         </form>
     );
 }
+
+/*
+Uses
+const [ProContactForm, setProContactForm] = useState(null);
+
+    useEffect(() => {
+        // Check if the Pro version has loaded its global component hook
+        if (window.PluginStarterProComponents && window.PluginStarterProComponents.ContactForm) {
+            setProContactForm(() => window.PluginStarterProComponents.ContactForm);
+        }
+        // console.log('Feedback component mounted. ProContactForm available:', !!window.PluginStarterProComponents?.ContactForm);
+    }, []);
+
+    return (        
+        <>  
+            {ProContactForm ? (
+                // If Pro is active, render the Pro Form component
+                <ProContactForm />
+            ) : (
+                // Fallback layout if only Free is active
+                
+                <p>
+                    Please upgrade to the Pro Version to access the integrated contact and diagnostics desk.
+                </p>
+            )}   
+        </>
+    );
+*/
