@@ -31,9 +31,48 @@ define('PLUGIN_STARTER_PRO_MAIN_FILE', __FILE__);
 if (file_exists(PLUGIN_STARTER_PRO_PATH . '/vendor/autoload.php')) {
     require_once PLUGIN_STARTER_PRO_PATH . '/vendor/autoload.php';
 }
+/**
+ * The code that runs during plugin activation.
+ * This action is documented in src/Core/Activator.php
+ */
+function plugin_starter_pro_activate()
+{
+	\MosPress\PluginStarterPro\Core\Activator::activate();
+}
 
-// 1. Inject Pro JavaScript into the Free Settings Screen Layout
+/**
+ * The code that runs during plugin deactivation.
+ * This action is documented in src/Core/Deactivator.php
+ */
+function plugin_starter_pro_deactivate()
+{
+	\MosPress\PluginStarterPro\Core\Deactivator::deactivate();
+}
+
+register_activation_hook(__FILE__, 'plugin_starter_pro_activate');
+register_deactivation_hook(__FILE__, 'plugin_starter_pro_deactivate');
+
+
+/**
+ * Register WP-CLI commands only if file exists
+ */
+if ( defined( 'WP_CLI' ) && WP_CLI && file_exists( plugin_dir_path( __FILE__ ) . 'includes/CLI/CLI_Command.php' ) ) {
+    $cli_file = plugin_dir_path( __FILE__ ) . 'includes/CLI/CLI_Command.php';
+
+    if ( file_exists( $cli_file ) ) {
+        WP_CLI::add_command( 'plugin-starter-pro', 'MosPress\PluginStarterPro\CLI\CLI_Command' );
+    }
+}
+
+
+function run_plugin_starter_pro() {
+    new \MosPress\PluginStarterPro\Plugin();
+}
+add_action('plugins_loaded', 'run_plugin_starter_pro');
+
+
 add_action('admin_enqueue_scripts', function($hook) {
+    // 1. Inject Pro JavaScript into the Free Settings Screen Layout
     // Only fire if the Free plugin menu screen is actively loading    
     if ($hook !== 'toplevel_page_plugin-starter') {
         return;
@@ -50,56 +89,3 @@ add_action('admin_enqueue_scripts', function($hook) {
     );
 });
 
-// 2. Register the Custom WordPress REST API Endpoint
-add_action('rest_api_init', function() {
-    register_rest_route('plugin-starter-pro/v1', '/feedback', array(
-        'methods'             => 'POST',
-        'callback'            => 'plugin_starter_pro_handle_feedback',
-        'permission_callback' => function() {
-            // Secure route so only logged-in administrators can push data
-            return current_user_can('manage_options');
-        }
-    ));
-    register_rest_route('plugin-starter-pro/v1', '/news', array(
-        'methods'             => 'GET',
-        'callback'            => 'plugin_starter_pro_handle_news',
-        'permission_callback' => function() {
-            // Secure route so only logged-in administrators can push data
-            return current_user_can('manage_options');
-        }
-    ));
-});
-
-// 3. Process the Contact Form Data
-function plugin_starter_pro_handle_feedback($request) {
-    $name    = sanitize_text_field($request->get_param('name'));
-    $email   = sanitize_email($request->get_param('email'));
-    $message = sanitize_textarea_field($request->get_param('message'));
-
-    if (empty($name) || empty($email) || empty($message)) {
-        return new WP_Error('missing_fields', 'All fields are mandatory.', array('status' => 400));
-    }
-
-    // Process the data (e.g., wp_mail to admin or saving to a database table)
-    // For demonstration, we simulate success:
-    return array(
-        'success' => true,
-        'message' => 'Data received securely by the pro processing engine!'
-    );
-}
-function plugin_starter_pro_handle_news($request) {
-    // Let's fetch news from this json endpoint for demonstration: https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-news.json
-    $response = wp_remote_get('https://raw.githubusercontent.com/mostak-shahid/update/refs/heads/master/plugin-news.json');
-    if (is_wp_error($response)) {
-        return new WP_Error('fetch_error', 'Unable to fetch news data.', array('status' => 500));
-    }
-
-    $body = wp_remote_retrieve_body($response);
-    $news_items = json_decode($body, true);
-
-    if (!is_array($news_items)) {
-        return new WP_Error('parse_error', 'Unable to parse news data.', array('status' => 500));
-    }
-
-    return $news_items;
-}
