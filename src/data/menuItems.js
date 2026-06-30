@@ -51,6 +51,20 @@ const menuItems = [
     //     url: "/settings/pro-dashboard",
     //     insertAfter: "more", // after "more"
     // }
+
+    {
+        itemKey: "props-passing",
+        text: "Props Passing",
+        url: "/settings/inputs/props_passing",
+        parentKey: "inputs", // after "more"
+    },
+
+    {
+        itemKey: "bridge",
+        text: "Bridge",
+        url: "/settings/inputs/bridge",
+        parentKey: "inputs", // after "more"
+    },
 ];
 
 export default menuItems;
