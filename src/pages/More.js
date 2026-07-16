@@ -126,32 +126,30 @@ const More = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h4 className="h4">{__("Enable Scripts", "plugin-starter-pro")}</h4>
-                        <p>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter-pro")}</p>
-                    </Col>
-                    {
-                        !settingsLoading &&
-                        <Col lg={6}>
-                            <Form.Group>
-                                <Form.Check
-                                    id="more-enable_scripts"
-                                    type="switch"
-                                    // label="Check me out" 
-                                    onChange={(e) => handleChange('more.enable_scripts', e.target.checked)}
-                                    checked={settings?.more?.enable_scripts ? true : false}
-
-                                />
-                            </Form.Group>
-                        </Col>
-                    }
-                </Row>
-            </div>
-
-            <div className="setting-unit py-4">
-                <Row>
-                    <Col lg={6}>
-                        <h4 className="h4">{__("CSS Editor", "plugin-starter-pro")}</h4>
-                        <p>{__("Add any custom CSS code if necessary", "plugin-starter-pro")}</p>
+                        {
+                            settingsLoading
+                                ?
+                                <>
+                                    <div className="loading-skeleton h4" style={{ width: '60%' }}></div>
+                                    <div className="loading-skeleton p" style={{ width: '70%' }}></div>
+                                </>
+                                :
+                                <>
+                                    {settingsDetails?.more?.css?.title &&
+                                        <h6 className="h6">
+                                            {settingsDetails?.more?.css?.title}
+                                            {settingsDetails?.more?.css?.hint &&
+                                                <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.css.hint}</Tooltip>}>
+                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                </OverlayTrigger>
+                                            }
+                                        </h6>
+                                    }
+                                    {settingsDetails?.more?.css?.intro &&
+                                        <p className="mb-0" dangerouslySetInnerHTML={{ __html: settingsDetails?.more?.css?.intro }} />
+                                    }
+                                </>
+                        }
                     </Col>
                     {
                         !settingsLoading &&
@@ -174,8 +172,30 @@ const More = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h4 className="h4">{__("JS Editor", "plugin-starter-pro")}</h4>
-                        <p>{__("Add any custom HTML code for Header if necessary", "plugin-starter-pro")}</p>
+                        {
+                            settingsLoading
+                                ?
+                                <>
+                                    <div className="loading-skeleton h4" style={{ width: '60%' }}></div>
+                                    <div className="loading-skeleton p" style={{ width: '70%' }}></div>
+                                </>
+                                :
+                                <>
+                                    {settingsDetails?.more?.js?.title &&
+                                        <h6 className="h6">
+                                            {settingsDetails?.more?.js?.title}
+                                            {settingsDetails?.more?.js?.hint &&
+                                                <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.js.hint}</Tooltip>}>
+                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                </OverlayTrigger>
+                                            }
+                                        </h6>
+                                    }
+                                    {settingsDetails?.more?.js?.intro &&
+                                        <p className="mb-0" dangerouslySetInnerHTML={{ __html: settingsDetails?.more?.js?.intro }} />
+                                    }
+                                </>
+                        }
                     </Col>
                     {
                         !settingsLoading &&
@@ -198,8 +218,30 @@ const More = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h4 className="h4">{__("Header Content", "plugin-starter-pro")}</h4>
-                        <p>{__("Add any custom JS code if necessary", "plugin-starter-pro")}</p>
+                        {
+                            settingsLoading
+                                ?
+                                <>
+                                    <div className="loading-skeleton h4" style={{ width: '60%' }}></div>
+                                    <div className="loading-skeleton p" style={{ width: '70%' }}></div>
+                                </>
+                                :
+                                <>
+                                    {settingsDetails?.more?.header_content?.title &&
+                                        <h6 className="h6">
+                                            {settingsDetails?.more?.header_content?.title}
+                                            {settingsDetails?.more?.header_content?.hint &&
+                                                <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.header_content.hint}</Tooltip>}>
+                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                </OverlayTrigger>
+                                            }
+                                        </h6>
+                                    }
+                                    {settingsDetails?.more?.header_content?.intro &&
+                                        <p className="mb-0" dangerouslySetInnerHTML={{ __html: settingsDetails?.more?.header_content?.intro }} />
+                                    }
+                                </>
+                        }
                     </Col>
                     {
                         !settingsLoading &&
@@ -222,8 +264,30 @@ const More = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h4 className="h4">{__("Footer Content", "plugin-starter-pro")}</h4>
-                        <p>{__("Add any custom HTML code for Footer if necessary", "plugin-starter-pro")}</p>
+                        {
+                            settingsLoading
+                                ?
+                                <>
+                                    <div className="loading-skeleton h4" style={{ width: '60%' }}></div>
+                                    <div className="loading-skeleton p" style={{ width: '70%' }}></div>
+                                </>
+                                :
+                                <>
+                                    {settingsDetails?.more?.footer_content?.title &&
+                                        <h6 className="h6">
+                                            {settingsDetails?.more?.footer_content?.title}
+                                            {settingsDetails?.more?.footer_content?.hint &&
+                                                <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.footer_content.hint}</Tooltip>}>
+                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                </OverlayTrigger>
+                                            }
+                                        </h6>
+                                    }
+                                    {settingsDetails?.more?.footer_content?.intro &&
+                                        <p className="mb-0" dangerouslySetInnerHTML={{ __html: settingsDetails?.more?.footer_content?.intro }} />
+                                    }
+                                </>
+                        }
                     </Col>
                     {
                         !settingsLoading &&
