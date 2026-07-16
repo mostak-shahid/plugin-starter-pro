@@ -65,6 +65,13 @@ const menuItems = [
         url: "/settings/inputs/bridge",
         parentKey: "inputs", // after "more"
     },
+    {
+        "itemKey": "licence",
+        "text": "Licence",
+        "description": "Enable additional features, extensions, and advanced options.",
+        "url": "/settings/licence",
+        insertAfter: "feedback", // after "more"
+    },
 ];
 
 export default menuItems;
