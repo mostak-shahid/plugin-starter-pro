@@ -4,9 +4,10 @@ namespace MosPress\PluginStarterPro\Hook;
 
 if (! defined('ABSPATH')) exit;
 
+use MosPress\PluginStarter\Hook\Filter_Hook;
 use MosPress\PluginStarterPro\Helpers\Utils;
 
-class Filter_Hook
+class Filter_Hook_Pro extends Filter_Hook
 {
 
     private $plugin_slug;      // plugin-starter
@@ -25,7 +26,7 @@ class Filter_Hook
     {
 
         // Automatically detect plugin slug + basename
-        $this->plugin_basename = plugin_basename(PLUGIN_STARTER_MAIN_FILE);
+        $this->plugin_basename = plugin_basename(PLUGIN_STARTER_PRO_MAIN_FILE);
         $this->plugin_slug     = dirname($this->plugin_basename);
 
         /**
@@ -47,7 +48,7 @@ class Filter_Hook
     {
 
         $default_links = [
-            '<a href="' . admin_url("admin.php?page={$this->plugin_slug}") . '">' .
+            '<a href="' . admin_url("admin.php?page=plugin-starter") . '">' .
                 esc_html__('Settings', 'plugin-starter') .
                 '</a>',
             '<a href="https://mostak-shahid.github.io/plugins/plugin-starter.html" target="_blank">' .
@@ -92,7 +93,6 @@ class Filter_Hook
             'utilities' => [
                 'tools' => [
                     'self_defense' => false, // delete, uninstall, none
-                    'delete_data_on' => 'none', // delete, uninstall, none
                 ],
             ],
         ];

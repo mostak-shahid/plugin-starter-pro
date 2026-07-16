@@ -65,10 +65,10 @@ if ( defined( 'WP_CLI' ) && WP_CLI && file_exists( plugin_dir_path( __FILE__ ) .
 }
 
 
-function run_plugin_starter_pro() {
+function plugin_starter_pro_run() {
     new \MosPress\PluginStarterPro\Plugin();
 }
-add_action('plugins_loaded', 'run_plugin_starter_pro');
+add_action('plugins_loaded', 'plugin_starter_pro_run');
 
 
 add_action('admin_enqueue_scripts', function($hook) {
