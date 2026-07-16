@@ -83,6 +83,7 @@ add_action('admin_enqueue_scripts', function($hook) {
     wp_enqueue_script(
         'plugin-starter-pro-features',
         PLUGIN_STARTER_PRO_URL . 'build/index-pro.js',
+        // PLUGIN_STARTER_PRO_URL . 'build/pluginstarterprocomponents.js',
         $asset_file['dependencies'],
         $asset_file['version'],
         false // Load before main app if possible, or alongside

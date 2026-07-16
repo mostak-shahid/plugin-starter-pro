@@ -4,11 +4,11 @@ namespace MosPress\PluginStarterPro;
 
 defined('ABSPATH') || exit;
 
-use MosPress\PluginStarterPro\API\Ajax_API;
-use MosPress\PluginStarterPro\API\Rest_API;
-use MosPress\PluginStarterPro\Hook\Action_Hook;
+use MosPress\PluginStarterPro\API\Ajax_API_Pro;
+use MosPress\PluginStarterPro\API\Rest_API_Pro;
+use MosPress\PluginStarterPro\Hook\Action_Hook_Pro;
 use MosPress\PluginStarterPro\Hook\Filter_Hook_Pro;
-use MosPress\PluginStarterPro\Helpers\Utils;
+use MosPress\PluginStarterPro\Helpers\Utils_Pro;
 use MosPress\PluginStarterPro\Core\SelfDefense;
 
 
@@ -18,14 +18,14 @@ class Plugin {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
-		Ajax_API::get_instance();
-		Rest_API::get_instance();
-		Action_Hook::get_instance();
+		Ajax_API_Pro::get_instance();
+		Rest_API_Pro::get_instance();
+		Action_Hook_Pro::get_instance();
 		Filter_Hook_Pro::get_instance();
 		SelfDefense::get_instance();
 		
 		// Instantiate additional core classes
-		new Utils();
+		new Utils_Pro();
 	}
 	/**
 	 * Register all of the hooks related to the admin area functionality

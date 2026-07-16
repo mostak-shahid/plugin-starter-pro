@@ -237,7 +237,7 @@ class SelfDefense
 							'The following plugin(s) have been deactivated successfully: '
 								. implode(', ', array_map('esc_html', $plugins_deactivated))
 						),
-						esc_html__('Plugin Deactivated', 'plugin-starter'),
+						esc_html__('Plugin Deactivated', 'plugin-starter-pro'),
 						['response' => 200]
 					);
 				} else {

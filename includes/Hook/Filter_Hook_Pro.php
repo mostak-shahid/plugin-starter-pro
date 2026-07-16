@@ -39,6 +39,7 @@ class Filter_Hook_Pro extends Filter_Hook
             [$this, 'add_action_links']
         );
         add_filter('plugin_starter_default_options_modify', [$this, 'pro_options']);
+        add_filter('plugin_starter_default_options_details_modify', [ $this, 'pro_options_details' ]);
     }
 
     /**
@@ -49,13 +50,13 @@ class Filter_Hook_Pro extends Filter_Hook
 
         $default_links = [
             '<a href="' . admin_url("admin.php?page=plugin-starter") . '">' .
-                esc_html__('Settings', 'plugin-starter') .
+                esc_html__('Settings', 'plugin-starter-pro') .
                 '</a>',
             '<a href="https://mostak-shahid.github.io/plugins/plugin-starter.html" target="_blank">' .
-                esc_html__('Docs', 'plugin-starter') .
+                esc_html__('Docs', 'plugin-starter-pro') .
                 '</a>',
             '<a href="https://www.facebook.com/mospressbd" target="_blank">' .
-                esc_html__('Community', 'plugin-starter') .
+                esc_html__('Community', 'plugin-starter-pro') .
                 '</a>',
         ];
 
@@ -93,6 +94,55 @@ class Filter_Hook_Pro extends Filter_Hook
             'utilities' => [
                 'tools' => [
                     'self_defense' => false, // delete, uninstall, none
+                ],
+            ],
+        ];
+        return $options;
+    }
+    public function pro_options_details($options) {
+        $options = [
+            'more' => [
+                'enable_scripts' => [
+                    'title' => __('Enable Scripts', 'plugin-starter-pro'),
+                    'intro' => __('Enable/Disable "Scripts" functionalities', 'plugin-starter-pro'),
+                    'hint' => __('This is a hints for...', 'plugin-starter-pro'),
+                    // 'before' => __('This is a before text for Text Input', 'plugin-starter-pro'),
+                    // 'after' => __('This is a after text for Text Input', 'plugin-starter-pro'),
+                    'url' => '/settings/more',
+                ],
+                'css' => [
+                    'title' => __('CSS Editor', 'plugin-starter-pro'),
+                    'intro' => __('Add any custom CSS code if necessary', 'plugin-starter-pro'),
+                    'hint' => __('This is a hints for...', 'plugin-starter-pro'),
+                    'url' => '/settings/more',
+                ],
+                'js' => [
+                    'title' => __('JS Editor', 'plugin-starter-pro'),
+                    'intro' => __('Add any custom JS code if necessary', 'plugin-starter-pro'),
+                    'hint' => __('This is a hints for...', 'plugin-starter-pro'),
+                    'url' => '/settings/more',
+                ],
+                'header_content' => [
+                    'title' => __('Header Content', 'plugin-starter-pro'),
+                    'intro' => __('Add any custom HTML code for <head> tag if necessary', 'plugin-starter-pro'),
+                    'hint' => __('This is a hints for...', 'plugin-starter-pro'),
+                    'url' => '/settings/more',
+                ],
+                'footer_content' => [
+                    'title' => __('Footer Content', 'plugin-starter-pro'),
+                    'intro' => __('Add any custom HTML code for <body> tag if necessary', 'plugin-starter-pro'),
+                    'hint' => __('This is a hints for...', 'plugin-starter-pro'),
+                    'url' => '/settings/more',
+                ],
+            ],
+            'utilities' => [
+                'tools' => [
+                    'self_defense' => [
+                        'title' => __('Self Defense', 'plugin-starter-pro'),
+                        'intro' => __('Password requirement for Deactivation.', 'plugin-starter-pro'),
+                        'hint' => __('This is a hints for...', 'plugin-starter-pro'),
+                        'url' => '/settings/utilities/tools',
+                    ],
                 ],
             ],
         ];

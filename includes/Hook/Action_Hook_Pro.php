@@ -2,7 +2,8 @@
 namespace MosPress\PluginStarterPro\Hook;
 if ( ! defined( 'ABSPATH' ) ) exit;
 use MosPress\PluginStarterPro\Helpers\Utils;
-class Action_Hook
+use MosPress\PluginStarter\Hook\Action_Hook;
+class Action_Hook_Pro extends Action_Hook
 {
 	/**
 	 * The ID of this plugin.
@@ -22,7 +23,7 @@ class Action_Hook
     }
     public function __construct()
 	{
-        $this->plugin_name = 'plugin-starter';
+        $this->plugin_name = 'plugin-starter-pro';
         add_action('admin_init', [$this, 'do_activation_redirect']);
 				
 		add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);

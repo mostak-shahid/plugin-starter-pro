@@ -10,8 +10,8 @@ export default function PropsPassing({settings, settingsDetails, settingsLoading
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h4 className="h4">{__("Enable Scripts", "plugin-starter")}</h4>
-                        <p>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter")}</p>
+                        <h4 className="h4">{__("Enable Scripts", "plugin-starter-pro")}</h4>
+                        <p>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter-pro")}</p>
                     </Col>
                     {
                         !settingsLoading &&

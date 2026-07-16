@@ -68,8 +68,8 @@ const More = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h4 className="h4">{__("Enable Scripts", "plugin-starter")}</h4>
-                        <p>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter")}</p>
+                        <h4 className="h4">{__("Enable Scripts", "plugin-starter-pro")}</h4>
+                        <p>{__("Enable/Disable \"Scripts\" functionalities", "plugin-starter-pro")}</p>
                     </Col>
                     {
                         !settingsLoading &&
@@ -92,8 +92,8 @@ const More = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
-                        <h4 className="h4">{__("CSS Editor", "plugin-starter")}</h4>
-                        <p>{__("Add any custom CSS code if necessary", "plugin-starter")}</p>
+                        <h4 className="h4">{__("CSS Editor", "plugin-starter-pro")}</h4>
+                        <p>{__("Add any custom CSS code if necessary", "plugin-starter-pro")}</p>
                     </Col>
                     {
                         !settingsLoading &&
@@ -104,6 +104,78 @@ const More = () => {
                                 value={settings?.more?.css}
                                 onChange={(value) => handleChange('more.css', value)}
                                 name="css-editor"
+                                width="100%"
+                                height="200px"
+                                editorProps={{ $blockScrolling: true }}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>
+                        <h4 className="h4">{__("JS Editor", "plugin-starter-pro")}</h4>
+                        <p>{__("Add any custom HTML code for Header if necessary", "plugin-starter-pro")}</p>
+                    </Col>
+                    {
+                        !settingsLoading &&
+                        <Col lg={12}>
+                            <AceEditor
+                                mode="js"
+                                theme="monokai"
+                                value={settings?.more?.js}
+                                onChange={(value) => handleChange('more.js', value)}
+                                name="js-editor"
+                                width="100%"
+                                height="200px"
+                                editorProps={{ $blockScrolling: true }}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>
+                        <h4 className="h4">{__("Header Content", "plugin-starter-pro")}</h4>
+                        <p>{__("Add any custom JS code if necessary", "plugin-starter-pro")}</p>
+                    </Col>
+                    {
+                        !settingsLoading &&
+                        <Col lg={12}>
+                            <AceEditor
+                                mode="html"
+                                theme="monokai"
+                                value={settings?.more?.header_content}
+                                onChange={(value) => handleChange('more.header_content', value)}
+                                name="header_content-editor"
+                                width="100%"
+                                height="200px"
+                                editorProps={{ $blockScrolling: true }}
+                            />
+                        </Col>
+                    }
+                </Row>
+            </div>
+
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>
+                        <h4 className="h4">{__("Footer Content", "plugin-starter-pro")}</h4>
+                        <p>{__("Add any custom HTML code for Footer if necessary", "plugin-starter-pro")}</p>
+                    </Col>
+                    {
+                        !settingsLoading &&
+                        <Col lg={12}>
+                            <AceEditor
+                                mode="html"
+                                theme="monokai"
+                                value={settings?.more?.footer_content}
+                                onChange={(value) => handleChange('more.footer_content', value)}
+                                name="footer_content-editor"
                                 width="100%"
                                 height="200px"
                                 editorProps={{ $blockScrolling: true }}

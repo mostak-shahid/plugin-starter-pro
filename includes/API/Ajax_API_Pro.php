@@ -1,12 +1,14 @@
 <?php
 namespace MosPress\PluginStarterPro\API;
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+use MosPress\PluginStarter\API\Ajax_API;
 use Plugin_Upgrader;
 use WP_Ajax_Upgrader_Skin;
 
 use MosPress\PluginStarterPro\Helpers\CryptoHelper;
 
-class Ajax_API
+class Ajax_API_Pro extends Ajax_API
 {
     private static $instance = null;
     public static function get_instance()

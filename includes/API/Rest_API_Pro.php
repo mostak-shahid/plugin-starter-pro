@@ -2,6 +2,7 @@
 namespace MosPress\PluginStarterPro\API;
 if ( ! defined( 'ABSPATH' ) ) exit;
 use MosPress\PluginStarter\API\LogsController;
+use MosPress\PluginStarter\API\Rest_API;
 use MosPress\PluginStarter\Helpers\Utils;
 
 use WP_Error;
@@ -15,7 +16,7 @@ use WP_REST_Server;
  *
  * Registers all REST API endpoints and routes them to appropriate controllers
  */
-class Rest_API
+class Rest_API_Pro extends Rest_API
 {
     
     private const NAMESPACE = 'plugin-starter-pro/v1';
@@ -121,7 +122,7 @@ class Rest_API
 
 		$response = [
 			'success' => true,
-			'msg'	=> esc_html__('Data successfully added.', 'plugin-starter')
+			'msg'	=> esc_html__('Data successfully added.', 'plugin-starter-pro')
 		];
 		return new WP_REST_Response($response, 200);
 	}
