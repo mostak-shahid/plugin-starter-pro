@@ -1,7 +1,10 @@
 import { __ } from "@wordpress/i18n";
-import { Button, Card, Row, Col, Form } from 'react-bootstrap';
+import { Row, Col, Form, FloatingLabel, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 // import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from '@wordpress/element';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 import AceEditor from "react-ace";
 // Load modes and theme
@@ -64,7 +67,62 @@ const More = () => {
 
     return (
         <>
-            {console.log(settings)}
+
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>
+                        {
+                            settingsLoading
+                                ?
+                                <>
+                                    <div className="loading-skeleton h4" style={{ width: '60%' }}></div>
+                                    <div className="loading-skeleton p" style={{ width: '70%' }}></div>
+                                </>
+                                :
+                                <>
+                                    {settingsDetails?.more?.enable_scripts?.title &&
+                                        <h6 className="h6">
+                                            {settingsDetails?.more?.enable_scripts?.title}
+                                            {settingsDetails?.more?.enable_scripts?.hint &&
+                                                <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.enable_scripts.hint}</Tooltip>}>
+                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                </OverlayTrigger>
+                                            }
+                                        </h6>
+                                    }
+                                    {settingsDetails?.more?.enable_scripts?.intro &&
+                                        <p className="mb-0" dangerouslySetInnerHTML={{ __html: settingsDetails?.more?.enable_scripts?.intro }} />
+                                    }
+                                </>
+                        }
+                    </Col>
+
+                    <Col lg={6}>
+                        {
+                            !settingsLoading &&
+
+                            <Form.Group>
+                                {settingsDetails?.more?.enable_scripts?.before &&
+                                    <Form.Label htmlFor="more-enable-scripts" dangerouslySetInnerHTML={{ __html: settingsDetails.more.enable_scripts.before }} />
+                                }
+                                <Form.Check
+                                    id="more-enable-scripts"
+                                    type="switch"
+                                    // label="Check me out" 
+                                    onChange={(e) => handleChange('more.enable_scripts', e.target.checked)}
+                                    checked={settings?.more?.enable_scripts ? true : false}
+
+                                />
+                                {settingsDetails?.more?.enable_scripts?.after &&
+                                    <Form.Text className="text-muted" dangerouslySetInnerHTML={{ __html: settingsDetails.more.enable_scripts.after }} />
+                                }
+                            </Form.Group>
+                        }
+                    </Col>
+
+                </Row>
+
+            </div>
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
