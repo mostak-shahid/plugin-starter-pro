@@ -1,6 +1,7 @@
 <?php
 
 namespace MosPress\PluginStarterPro\Core;
+if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Fired during plugin activation
  *

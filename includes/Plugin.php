@@ -9,6 +9,8 @@ use MosPress\PluginStarterPro\API\Rest_API;
 use MosPress\PluginStarterPro\Hook\Action_Hook;
 use MosPress\PluginStarterPro\Hook\Filter_Hook;
 use MosPress\PluginStarterPro\Helpers\Utils;
+use MosPress\PluginStarterPro\Core\SelfDefense;
+
 
 class Plugin {
 	public function __construct() {
@@ -20,6 +22,7 @@ class Plugin {
 		Rest_API::get_instance();
 		Action_Hook::get_instance();
 		Filter_Hook::get_instance();
+		SelfDefense::get_instance();
 		
 		// Instantiate additional core classes
 		new Utils();
@@ -52,10 +55,10 @@ class Plugin {
 	}
 	public function admin_enqueue_scripts()
 	{
-		wp_enqueue_style('plugin-starter-admin-styles', PLUGIN_STARTER_URL . 'assets/css/admin.css', [], PLUGIN_STARTER_VERSION);
+		wp_enqueue_style('plugin-starter-pro-admin-styles', PLUGIN_STARTER_PRO_URL . 'assets/css/admin-style.css', [], PLUGIN_STARTER_VERSION);
 	}
 	public function wp_enqueue_scripts()
 	{
-		// wp_enqueue_style('plugin-starter-public-styles', PLUGIN_STARTER_URL . 'assets/css/public.css', [], PLUGIN_STARTER_VERSION);
+		// wp_enqueue_style('plugin-starter-public-styles', PLUGIN_STARTER_PRO_URL . 'assets/css/public.css', [], PLUGIN_STARTER_VERSION);
 	}
 }
