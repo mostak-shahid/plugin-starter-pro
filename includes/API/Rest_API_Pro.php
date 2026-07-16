@@ -38,20 +38,36 @@ class Rest_API_Pro extends Rest_API
         add_action('rest_api_init', [$this, 'rest_api_init']);
     }
     public function rest_api_init()
-    {
+    {        
+        $this->register_options_endpoints();
+        $this->register_plugins_endpoints();
+        $this->register_feedback_endpoints();
+        $this->register_news_endpoints();
+    }   
+
+    /**
+     * Register options endpoints
+     */
+    private function register_options_endpoints() {  
 		register_rest_route(self::NAMESPACE, '/options',
 			array(
-				'methods'             => 'POST',
+				'methods'             => WP_REST_Server::CREATABLE,
 				'callback'            => [$this, 'update_settings'],
 				// 'permission_callback' => '__return_true'
 				'permission_callback' => function () {
                     return current_user_can('manage_options');
                 },
 			)
-		);        
+		); 
+    }   
+
+    /**
+     * Register plugins endpoints
+     */
+    private function register_plugins_endpoints() {         
         register_rest_route( self::NAMESPACE, '/plugins', 
             [
-                'methods' => 'GET',
+                'methods' => WP_REST_Server::READABLE,
                 'callback' => function () {
                     $response = wp_remote_get('https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&request[author]=mostakshahid&request[per_page]=24');
                     if (is_wp_error($response)) {
@@ -64,10 +80,15 @@ class Rest_API_Pro extends Rest_API
                 },
             ]
         );
+    }   
 
+    /**
+     * Register feedback endpoints
+     */
+    private function register_feedback_endpoints() {   
         register_rest_route( self::NAMESPACE, '/feedback', 
             [
-                'methods'             => 'POST',
+                'methods'             => WP_REST_Server::CREATABLE,
                 'callback'            => [$this, 'plugin_starter_pro_handle_feedback'],
                 'permission_callback' => function() {
                     // Secure route so only logged-in administrators can push data
@@ -75,9 +96,15 @@ class Rest_API_Pro extends Rest_API
                 }
             ]
         );
+    }   
+
+    /**
+     * Register news endpoints
+     */
+    private function register_news_endpoints() {   
         register_rest_route( self::NAMESPACE, '/news', 
             [
-                'methods'             => 'GET',
+                'methods'             => WP_REST_Server::READABLE,
                 'callback'            => [$this, 'plugin_starter_pro_handle_news'],
                 'permission_callback' => function() {
                     // Secure route so only logged-in administrators can push data
