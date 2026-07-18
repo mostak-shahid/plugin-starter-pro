@@ -2,7 +2,6 @@ import { __ } from "@wordpress/i18n";
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import {Offcanvas, Button, Stack, Badge, Modal} from 'react-bootstrap';
-
 export default function PluginNews({showOffcanvas, setShowOffcanvas}) {
     // const [showOffcanvas, setShowOffcanvas] = useState(false);
 
@@ -10,8 +9,12 @@ export default function PluginNews({showOffcanvas, setShowOffcanvas}) {
     const OffcanvasShow = () => setShowOffcanvas(true);
 
     const [showModal, setShowModal] = useState(false);
+    const [newsReload, setNewsReload] = useState(0);
 
-    const ModalClose = () => setShowModal(false);
+    const ModalClose = () => {
+        setNewsReload(Math.random());
+        setShowModal(false);
+    }
     const ModalShow = () => setShowModal(true);
 
 
@@ -32,7 +35,10 @@ export default function PluginNews({showOffcanvas, setShowOffcanvas}) {
                     path: '/plugin-starter-pro/v1/news',
                     method: 'GET'
                 });
-                setNewsItems(response);
+                console.log(response);
+                if (response.success) {                    
+                    setNewsItems(response.data);
+                }
             } catch (error) {
                 console.error("Error fetching news:", error);
             } finally {
@@ -40,12 +46,32 @@ export default function PluginNews({showOffcanvas, setShowOffcanvas}) {
             }
         };
         fetchNews();
-    }, []); 
+    }, [newsReload]); 
+
+    const readMessage = async(item) => {
+        try {
+            const params = new URLSearchParams({
+                id: item?.id,
+            });
+            // Sends data directly to the native WordPress custom REST API endpoint
+            const response = await apiFetch({
+                path: `/plugin-starter-pro/v1/news/read?${params.toString()}`,
+                method: 'POST'
+            });            
+            setActiveNews(item);
+            ModalShow();
+            OffcanvasClose();
+        } catch (error) {
+            console.error("Error fetching news:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <>
-            <Offcanvas show={showOffcanvas} onHide={OffcanvasClose} placement="end">
-                <Offcanvas.Header closeButton>
+            <Offcanvas className="mos-press-news-container" show={showOffcanvas} onHide={OffcanvasClose} placement="end">
+                <Offcanvas.Header closeButton className="border-bottom">
                     <Offcanvas.Title>{__("What's New?", "plugin-starter-pro")}</Offcanvas.Title>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
@@ -57,7 +83,11 @@ export default function PluginNews({showOffcanvas, setShowOffcanvas}) {
                     ) : (
                         <div style={{ overflowY: 'auto' }}>
                             {newsItems.map((item) => (
-                                <div key={item.id} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}>
+                                <div 
+                                    key={item.id} 
+                                    className={`mos-press-news-item border rounded-3 p-2 mb-3 ${item.is_read?'news-read':'news-unread'}`}
+                                    // style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid var(--semi-color-border)' }}
+                                >
                                     <strong style={{ fontSize: '16px' }}>{item.title}</strong>
                                     {item?.tags && item.tags.length > 0 && (
                                         <div className='mt-2'>
@@ -73,10 +103,9 @@ export default function PluginNews({showOffcanvas, setShowOffcanvas}) {
                                             {truncateText(item.news)}
                                         </p>
                                         <Button
+                                            size="sm"
                                             onClick={() => {
-                                                setActiveNews(item);
-                                                ModalShow();
-                                                OffcanvasClose();
+                                                readMessage(item);
                                             }}
                                             // style={{ padding: 0, marginLeft: '5px' }}
                                         >
@@ -95,7 +124,7 @@ export default function PluginNews({showOffcanvas, setShowOffcanvas}) {
 
             <Modal show={showModal} onHide={ModalClose}>
                 <Modal.Header closeButton>
-                <Modal.Title>{activeNews ? activeNews.title : "Modal heading"}</Modal.Title>
+                <Modal.Title>{activeNews ? activeNews.title : __("Modal heading", 'plugin-starter-pro')}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {activeNews?.tags?.length > 0 && (

@@ -38,4 +38,9 @@
   color: #dc3232;
   margin-top: 10px;
   display: none;
+}
+
+.mos-press-news-container .mos-press-news-item.news-unread {
+  background-color: var(--bs-warning-bg-subtle);
+  border-color: var(--bs-warning-border-subtle);
 }/*# sourceMappingURL=admin-style.css.map */
