@@ -1,5 +1,14 @@
 import { __ } from "@wordpress/i18n";
 import { useCallback, useEffect, useState } from '@wordpress/element';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// Solid icons
+import { faHome, faChartColumn, faUsers } from '@fortawesome/free-solid-svg-icons'; 
+// Brand icons
+import { faWordpress } from '@fortawesome/free-brands-svg-icons'; 
+
+
+// Usage:
+// <FontAwesomeRating rating={rating} />
 export default function PluginCard(plugin) {
     const {image, name, short_description, author, plugin_source='internal', plugin_slug='', plugin_file='', download_url='', version='1.0.0', rating='0', num_ratings='0', active_installs='0', tested} = plugin;
     /*
@@ -148,6 +157,7 @@ export default function PluginCard(plugin) {
                     <a href={`https://wordpress.org/plugins/${plugin_slug}/`} target="_blank"><h6 className="h6" style={{fontSize: 18, marginBottom: 0}} >{name}</h6></a>
                     <div className="d-flex">
                         {/* <Rating allowHalf defaultValue={(rating/20).toFixed(2)} disabled/>    */}
+                        {(rating/20).toFixed(2)}
                         <span>({num_ratings})</span>
                     </div> 
                 </div>
@@ -157,12 +167,15 @@ export default function PluginCard(plugin) {
                 <p>{short_description}</p>
             </div>
             <div className="d-flex justify-content-between mt-2">
-                <span dangerouslySetInnerHTML={{__html: author}}/>
+                <div className="d-flex align-items-center gap-1">
+                    <FontAwesomeIcon icon={faUsers} />
+                    <span dangerouslySetInnerHTML={{__html: author}}/>
+                </div>
                 <div className="tag">{version}</div>
             </div>
             <div className="d-flex justify-content-between mt-1">
-                <div className="d-flex">IconHistogram <span>{__(`${active_installs} ${active_installs>0?"+":""} active installations`, "plugin-starter")}</span></div>
-                <div className="d-flex">WordPress Logo {__(`Tested with ${tested}`, "plugin-starter")}</div>
+                <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faChartColumn} /><span>{__(`${active_installs} ${active_installs>0?"+":""} active installations`, "plugin-starter")}</span></div>
+                <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faWordpress}/> {__(`Tested with ${tested}`, "plugin-starter")}</div>
             </div>
             
         </div>

@@ -1,0 +1,29 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as faSolidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
+import { faStar as faRegularStar } from '@fortawesome/free-regular-svg-icons';
+
+const FontAwesomeRating = ({ rating }) => {
+    // Convert your 0-100 score to a 0-5 scale
+    const numericRating = parseFloat((rating / 20).toFixed(2));
+
+    return (
+        <div className="d-flex align-items-center gap-1 text-warning" aria-label={`Rating: ${numericRating} out of 5`}>
+            {[1, 2, 3, 4, 5].map((starIndex) => {
+                if (numericRating >= starIndex) {
+                    // Full Star
+                    return <FontAwesomeIcon key={starIndex} icon={faSolidStar} />;
+                } else if (numericRating > starIndex - 1 && numericRating < starIndex) {
+                    // Half Star
+                    return <FontAwesomeIcon key={starIndex} icon={faStarHalfAlt} />;
+                } else {
+                    // Empty Star
+                    return <FontAwesomeIcon key={starIndex} icon={faRegularStar} />;
+                }
+            })}
+            <span className="ms-1 text-muted small">{numericRating}</span>
+        </div>
+    );
+};
+
+// Usage:
+// <FontAwesomeRating rating={rating} />
