@@ -81,12 +81,19 @@ add_action('admin_enqueue_scripts', function($hook) {
     $asset_file = include(PLUGIN_STARTER_PRO_PATH . 'build/index-pro.asset.php');
 
     wp_enqueue_script(
-        'plugin-starter-pro-features',
+        'plugin-starter-pro-script',
         PLUGIN_STARTER_PRO_URL . 'build/index-pro.js',
         // PLUGIN_STARTER_PRO_URL . 'build/pluginstarterprocomponents.js',
         $asset_file['dependencies'],
         $asset_file['version'],
         false // Load before main app if possible, or alongside
+    );
+
+    wp_enqueue_style(
+        'plugin-starter-pro-style', 
+        PLUGIN_STARTER_PRO_URL . 'build/index-pro.css',
+        // $asset_file['dependencies'],
+        // $asset_file['version'],
     );
 });
 

@@ -15,6 +15,13 @@ use WP_REST_Response;
 use Plugin_Upgrader;
 use WP_Ajax_Upgrader_Skin;
 use WP_REST_Server;
+use WP_REST_Controller;
+
+// Ensure WordPress core file API is loaded when needed
+require_once ABSPATH . 'wp-admin/includes/file.php';
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
+require_once ABSPATH . 'wp-admin/includes/theme.php';
+require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 /**
  * Rest API Router
@@ -23,7 +30,6 @@ use WP_REST_Server;
  */
 class Rest_API_Pro extends Rest_API
 {
-
     private const NAMESPACE = 'plugin-starter-pro/v1';
     private static $instance = null;
     /**
@@ -56,18 +62,14 @@ class Rest_API_Pro extends Rest_API
      */
     private function register_options_endpoints()
     {
-        register_rest_route(
-            self::NAMESPACE,
-            '/options',
-            array(
-                'methods'             => WP_REST_Server::CREATABLE,
-                'callback'            => [$this, 'update_settings'],
-                // 'permission_callback' => '__return_true'
-                'permission_callback' => function () {
-                    return current_user_can('manage_options');
-                },
-            )
-        );
+        register_rest_route( self::NAMESPACE, '/options', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [$this, 'update_settings'],
+            // 'permission_callback' => '__return_true'
+            'permission_callback' => function () {
+                return current_user_can('manage_options');
+            },
+        ]);
     }
 
     /**
@@ -75,24 +77,79 @@ class Rest_API_Pro extends Rest_API
      */
     private function register_plugins_endpoints()
     {
-        register_rest_route(
-            self::NAMESPACE,
-            '/plugins',
-            [
-                'methods' => WP_REST_Server::READABLE,
-                'callback' => function () {
-                    $response = wp_remote_get('https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&request[author]=mostakshahid&request[per_page]=24');
-                    if (is_wp_error($response)) {
-                        return new WP_Error('api_error', 'Failed to fetch plugins', ['status' => 500]);
-                    }
-                    return json_decode(wp_remote_retrieve_body($response), true);
-                },
-                'permission_callback' => function () {
-                    return current_user_can('manage_options');
-                },
-            ]
-        );
+        register_rest_route( self::NAMESPACE, '/plugins', [
+            'methods' => WP_REST_Server::READABLE,
+            'callback' => function () {
+                $response = wp_remote_get('https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&request[author]=mostakshahid&request[per_page]=24');
+                if (is_wp_error($response)) {
+                    return new WP_Error('api_error', 'Failed to fetch plugins', ['status' => 500]);
+                }
+                return json_decode(wp_remote_retrieve_body($response), true);
+            },
+            'permission_callback' => function () {
+                return current_user_can('manage_options');
+            },
+        ]);
+
+        // Route for installing a plugin
+        register_rest_route(self::NAMESPACE, '/plugin/install', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [$this, 'install_plugin'],
+            'permission_callback' => function () {
+                return current_user_can('activate_plugins') && current_user_can('install_plugins') && current_user_can('delete_plugins');
+            },
+            'args'                => [
+                'source' => [
+                    'required'          => true,
+                    'type'              => 'string',
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'description'       => 'URL to the zip file or WordPress repo slug',
+                ],
+            ],
+        ]);
+
+        // Route for toggle actions: activate, deactivate, delete
+        register_rest_route(self::NAMESPACE, '/plugin/action', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [$this, 'handle_plugin_action'],
+            'permission_callback' => function () {
+                return current_user_can('activate_plugins') && current_user_can('install_plugins') && current_user_can('delete_plugins');
+            },
+            'args'                => [
+                'plugin' => [
+                    'required'          => true,
+                    'type'              => 'string',
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'description'       => 'Plugin file path (e.g., elementor/elementor.php)',
+                ],
+                'plugin_action' => [
+                    'required'          => true,
+                    'type'              => 'string',
+                    'enum'              => ['activate', 'deactivate', 'delete'],
+                    'sanitize_callback' => 'sanitize_key',
+                ],
+            ],
+        ]);
+
+
+        // Route for checking a plugin's status
+        register_rest_route( self::NAMESPACE, '/plugin/status', [
+            'methods'             => WP_REST_Server::READABLE, // GET Request
+            'callback'            => [$this, 'get_plugin_status'],
+            'permission_callback' => function () {
+                return current_user_can('activate_plugins') && current_user_can('install_plugins') && current_user_can('delete_plugins');
+            },
+            'args'                => [
+                'plugin' => [
+                    'required'          => true,
+                    'type'              => 'string',
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'description'       => 'Plugin directory and file (e.g., elementor/elementor.php) or just the folder name if checking uninstalled status.',
+                ],
+            ],
+        ]);
     }
+
 
     /**
      * Register feedback endpoints
@@ -219,7 +276,7 @@ class Rest_API_Pro extends Rest_API
         if (false === $encrypted_key) {
             return new WP_Error(
                 'key_not_found',
-                __('Deactivation key not found. Please reactivate the plugin.', 'plugin-starter'),
+                __('Deactivation key not found. Please reactivate the plugin.', 'plugin-starter-pro'),
                 array('status' => 404)
             );
         }
@@ -230,7 +287,7 @@ class Rest_API_Pro extends Rest_API
         if (false === $decrypted_key) {
             return new WP_Error(
                 'decryption_failed',
-                __('Failed to decrypt deactivation key. Please contact support.', 'plugin-starter'),
+                __('Failed to decrypt deactivation key. Please contact support.', 'plugin-starter-pro'),
                 array('status' => 500)
             );
         }
@@ -249,15 +306,12 @@ class Rest_API_Pro extends Rest_API
             array(
                 'success' => true,
                 'deactivation_url' => $deactivation_url,
-                'message' => __('Deactivation link generated successfully.', 'plugin-starter'),
-                'warning' => __('This link will only work once. After deactivation, a new link will be generated on reactivation.', 'plugin-starter'),
+                'message' => __('Deactivation link generated successfully.', 'plugin-starter-pro'),
+                'warning' => __('This link will only work once. After deactivation, a new link will be generated on reactivation.', 'plugin-starter-pro'),
             ),
             200
         );
     }
-
-
-
     public function update_settings(WP_REST_Request $request) //WP_REST_Request $request
     {
         if (!current_user_can('manage_options')) {
@@ -296,114 +350,172 @@ class Rest_API_Pro extends Rest_API
         return new WP_REST_Response($response, 200);
     }
 
-    public function plugin_starter_ajax_install_plugins(WP_REST_Request $request)
-    {
+    /**
+     * 1. Install Plugin from GitHub, Zip, or WP Repo
+     */
+    public function install_plugin(WP_REST_Request $request) {
+        $source = $request->get_param('source');
 
-        if (!current_user_can('install_plugins')) {
-            return new WP_Error(
-                'rest_update_error',
-                'Sorry, you are not allowed to complete this action.' . get_current_user_id(),
-                array('status' => 403)
-            );
+        // Initialize WordPress Filesystem
+        if (!function_exists('WP_Filesystem')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
         }
-        $sub_action = sanitize_text_field(wp_unslash($request->get_param('sub_action')));
-        $plugin_slug = sanitize_text_field(wp_unslash($request->get_param('plugin_slug')));
-        $plugin_file = sanitize_text_field(wp_unslash($request->get_param('plugin_file')));
-        $plugin_source = sanitize_text_field(wp_unslash($request->get_param('plugin_source')));
-
-        include_once ABSPATH . 'wp-admin/includes/file.php';
-        include_once ABSPATH . 'wp-admin/includes/misc.php';
-        include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-        include_once ABSPATH . 'wp-admin/includes/plugin.php';
-
-        if ($sub_action === 'install' || $sub_action === 'install_activate') {
-
-            if ($plugin_source === 'external') {
-                $download_url = isset($_POST['download_url']) ? sanitize_url(wp_unslash($_POST['download_url'])) : '';
-
-                $upgrader = new Plugin_Upgrader(new WP_Ajax_Upgrader_Skin());
-                $installed = $upgrader->install($download_url);
-
-                if (is_wp_error($installed)) {
-                    return new WP_Error(
-                        'error_message',
-                        esc_html__('Install failed: ', 'plugin-starter') . $installed->get_error_message(),
-                        array('status' => 403)
-                    );
-                }
-
-                // Initialize WP_Filesystem
-                global $wp_filesystem;
-                if (! $wp_filesystem || ! is_a($wp_filesystem, 'WP_Filesystem_Base')) {
-                    WP_Filesystem();
-                }
-
-                $extracted_dir = WP_PLUGIN_DIR . '/' . $plugin_slug;
-                $destination   = WP_PLUGIN_DIR . '/' . $plugin_slug;
-
-                if (is_dir($extracted_dir) && $extracted_dir !== $destination) {
-                    if (! $wp_filesystem->move($extracted_dir, $destination)) {
-                        return new WP_Error(
-                            'error_message',
-                            esc_html__('Failed to move plugin directory using WP_Filesystem.', 'plugin-starter'),
-                            array('status' => 403)
-                        );
-                    }
-                }
-            } else {
-                include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
-
-                $api = plugins_api('plugin_information', ['slug' => $plugin_slug, 'fields' => ['sections' => false]]);
-                if (is_wp_error($api)) {
-                    return new WP_Error(
-                        'error_message',
-                        esc_html__('Plugin info fetch failed', 'plugin-starter'),
-                        array('status' => 403)
-                    );
-                }
-
-                $upgrader       = new Plugin_Upgrader(new WP_Ajax_Upgrader_Skin());
-                $install_result = $upgrader->install($api->download_link);
-
-                if (is_wp_error($install_result)) {
-                    return new WP_Error(
-                        'error_message',
-                        esc_html__('Install failed: ', 'plugin-starter') . $install_result->get_error_message(),
-                        array('status' => 403)
-                    );
-                }
-            }
-
-            if ($sub_action === 'install') {
-                $response = [
-                    'success' => true,
-                    'msg'    => esc_html__('Plugin successfully installed.', 'plugin-starter-pro')
-                ];
-                return new WP_REST_Response($response, 200);
-            }
+        
+        // Setup credentials for filesystem
+        $url = wp_nonce_url(rest_url(self::NAMESPACE . '/plugin/install'), 'wp_rest');
+        if (false === ($creds = request_filesystem_credentials($url, '', false, false, null))) {
+            return new WP_Error('fs_error', 'Filesystem credentials failed.', ['status' => 403]);
         }
 
-        if ($sub_action === 'install_activate' || $sub_action === 'activate') {
-            $result = activate_plugin(WP_PLUGIN_DIR . '/' . $plugin_file);
-            if (is_wp_error($result)) {
-                return new WP_Error(
-                    'error_message',
-                    esc_html__('Activation failed: ', 'plugin-starter') . $result->get_error_message(),
-                    array('status' => 403)
-                );
-            } else {
-                $response = [
-                    'success' => true,
-                    'msg'    => esc_html__('Plugin successfully activated.', 'plugin-starter-pro')
-                ];
-                return new WP_REST_Response($response, 200);
-            }
+        if (!WP_Filesystem($creds)) {
+            return new WP_Error('fs_failed', 'Failed to initialize WP_Filesystem.', ['status' => 500]);
         }
-        return new WP_Error(
-            'error_message',
-            esc_html__('Unknown action.', 'plugin-starter'),
-            array('status' => 403)
-        );
+
+        // Determine if it is a direct download link or a WP Repo slug
+        $download_url = $source;
+        if (!filter_var($source, FILTER_VALIDATE_URL)) {
+            // Assume it is a slug from WordPress.org repository
+            $download_url = 'https://downloads.wordpress.org/plugin/' . sanitize_key($source) . '.zip';
+        }
+
+        // Use standard WordPress Upgrader with an AJAX skin to prevent HTML output pollution
+        $skin     = new WP_Ajax_Upgrader_Skin();
+        $upgrader = new Plugin_Upgrader($skin);
+        $result   = $upgrader->install($download_url);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        if (!$result && !empty($skin->get_errors())) {
+            return new WP_Error('install_failed', $skin->get_error_messages()[0], ['status' => 400]);
+        }
+
+        $plugin_file = $upgrader->plugin_info();
+
+        return new WP_REST_Response([
+            'success' => true,
+            'message' => 'Plugin installed successfully.',
+            'plugin'  => $plugin_file
+        ], 200);
+    }
+
+    /**
+     * Route hub to Activate, Deactivate, or Delete plugins
+     */
+    public function handle_plugin_action(WP_REST_Request $request) {
+        $plugin = $request->get_param('plugin');
+        $action = $request->get_param('plugin_action');
+
+        switch ($action) {
+            case 'activate':
+                return $this->activate($plugin);
+            case 'deactivate':
+                return $this->deactivate($plugin);
+            case 'delete':
+                return $this->delete($plugin);
+            default:
+                return new WP_Error('invalid_action', 'Action not recognized.', ['status' => 400]);
+        }
+    }
+
+    /**
+     * 2. Activate Plugin
+     */
+    private function activate($plugin) {
+        if (!file_exists(WP_PLUGIN_DIR . '/' . $plugin)) {
+            return new WP_Error('not_found', 'Plugin file does not exist.', ['status' => 404]);
+        }
+
+        $result = activate_plugin($plugin);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return new WP_REST_Response([
+            'success' => true,
+            'message' => 'Plugin activated successfully.'
+        ], 200);
+    }
+
+    /**
+     * 3. Deactivate Plugin
+     */
+    private function deactivate($plugin) {
+        if (!is_plugin_active($plugin)) {
+            return new WP_Error('already_inactive', 'Plugin is not active.', ['status' => 400]);
+        }
+
+        deactivate_plugins($plugin);
+
+        return new WP_REST_Response([
+            'success' => true,
+            'message' => 'Plugin deactivated successfully.'
+        ], 200);
+    }
+
+    /**
+     * 4. Delete Plugin
+     */
+    private function delete($plugin) {
+        if (is_plugin_active($plugin)) {
+            return new WP_Error('cannot_delete', 'Cannot delete an active plugin. Deactivate it first.', ['status' => 400]);
+        }
+
+        if (!file_exists(WP_PLUGIN_DIR . '/' . $plugin)) {
+            return new WP_Error('not_found', 'Plugin file not found.', ['status' => 404]);
+        }
+
+        $result = delete_plugins([$plugin]);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        if (!$result) {
+            return new WP_Error('delete_failed', 'Failed to delete plugin files.', ['status' => 500]);
+        }
+
+        return new WP_REST_Response([
+            'success' => true,
+            'message' => 'Plugin deleted successfully.'
+        ], 200);
+    }
+    /**
+     * 5. Get Current Plugin Status
+     */
+    public function get_plugin_status(WP_REST_Request $request) {
+        $plugin = $request->get_param('plugin');
+        
+        // Define paths to check
+        $plugin_file_path = WP_PLUGIN_DIR . '/' . $plugin;
+        $plugin_dir_path  = WP_PLUGIN_DIR . '/' . dirname($plugin);
+
+        // 1. Check if the plugin is uninstalled / does not exist
+        if (!file_exists($plugin_file_path) && !is_dir($plugin_dir_path)) {
+            return new WP_REST_Response([
+                'success' => true,
+                'status'  => 'uninstalled',
+                'message' => 'Plugin is not installed on this server.'
+            ], 200);
+        }
+
+        // 2. Check if the plugin is activated
+        if (is_plugin_active($plugin)) {
+            return new WP_REST_Response([
+                'success' => true,
+                'status'  => 'activated',
+                'message' => 'Plugin is installed and active.'
+            ], 200);
+        }
+
+        // 3. If it exists but isn't active, it must be deactivated
+        return new WP_REST_Response([
+            'success' => true,
+            'status'  => 'deactivated',
+            'message' => 'Plugin is installed but deactivated.'
+        ], 200);
     }
     public function plugin_starter_pro_handle_feedback($request)
     {

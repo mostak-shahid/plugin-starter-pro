@@ -54,3 +54,36 @@
         }
     }
 }
+.plugin-starter-plugin-card {
+    .plugin-image {
+        flex: 0 0 80px;
+        max-width: 80px;
+        height: auto;
+    }
+    .plugin-title {
+        color: #3858e9;
+        text-decoration: none;
+        h6 {
+            font-size: 18px;
+        }
+    }
+    .plugin-authors {
+        a {
+            text-decoration: none;
+            color: var(--bs-body-color);
+        }
+    }
+}
+
+.star-rating {
+    path {
+        stroke: currentColor !important;
+        stroke-width: 32px;
+    }
+
+    &.border-full-star {
+        path {
+            fill: transparent !important;
+        }
+    }
+}

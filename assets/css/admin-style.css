@@ -43,4 +43,29 @@
 .mos-press-news-container .mos-press-news-item.news-unread {
   background-color: var(--bs-warning-bg-subtle);
   border-color: var(--bs-warning-border-subtle);
+}
+
+.plugin-starter-plugin-card .plugin-image {
+  flex: 0 0 80px;
+  max-width: 80px;
+  height: auto;
+}
+.plugin-starter-plugin-card .plugin-title {
+  color: #3858e9;
+  text-decoration: none;
+}
+.plugin-starter-plugin-card .plugin-title h6 {
+  font-size: 18px;
+}
+.plugin-starter-plugin-card .plugin-authors a {
+  text-decoration: none;
+  color: var(--bs-body-color);
+}
+
+.star-rating path {
+  stroke: currentColor !important;
+  stroke-width: 32px;
+}
+.star-rating.border-full-star path {
+  fill: transparent !important;
 }/*# sourceMappingURL=admin-style.css.map */

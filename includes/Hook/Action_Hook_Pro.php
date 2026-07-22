@@ -49,13 +49,13 @@ class Action_Hook_Pro extends Action_Hook
 		wp_enqueue_script('jquery');
 		wp_enqueue_media();
 
-		wp_enqueue_script('plugin-starter-admin-ajax', PLUGIN_STARTER_URL . 'assets/js/admin-ajax.js', array('jquery'), PLUGIN_STARTER_VERSION, false);
-		wp_enqueue_script('plugin-starter-admin-script', PLUGIN_STARTER_URL . 'assets/js/admin.js', array('jquery'), PLUGIN_STARTER_VERSION, false);
+		// wp_enqueue_script('plugin-starter-admin-ajax', PLUGIN_STARTER_PRO_URL . 'assets/js/admin-ajax.js', array('jquery'), PLUGIN_STARTER_VERSION, false);
+		// wp_enqueue_script('plugin-starter-admin-script', PLUGIN_STARTER_PRO_URL . 'assets/js/admin.js', array('jquery'), PLUGIN_STARTER_VERSION, false);
 		$ajax_params = [
 			'admin_url' => admin_url(),
 			'home_url' => home_url(),
 			'ajax_url' => admin_url('admin-ajax.php'),
-			'image_url' => PLUGIN_STARTER_URL . 'assets/images/',
+			'image_url' => PLUGIN_STARTER_PRO_URL . 'assets/images/',
 			'_admin_nonce' => esc_attr(wp_create_nonce('plugin_starter_admin_nonce')),
 			'api_nonce' => esc_attr(wp_create_nonce('wp_rest')),
 			'get_current_user_id' => get_current_user_id(),
@@ -76,20 +76,20 @@ class Action_Hook_Pro extends Action_Hook
 		wp_localize_script('plugin-starter-admin-ajax', 'plugin_starter_ajax_obj', $ajax_params);
 
 		wp_enqueue_style( 'wp-components' );
-		wp_enqueue_style('plugin-starter-admin', PLUGIN_STARTER_URL . 'assets/css/admin.css', array(), PLUGIN_STARTER_VERSION, 'all');
+		// wp_enqueue_style('plugin-starter-admin', PLUGIN_STARTER_PRO_URL . 'assets/css/admin.css', array(), PLUGIN_STARTER_VERSION, 'all');
 
 	}
 	public function wp_enqueue_scripts($hook)
 	{
 		wp_enqueue_script(
 			'plugin-starter-react-app',
-			PLUGIN_STARTER_URL . 'build/index.js',
+			PLUGIN_STARTER_PRO_URL . 'build/index.js',
 		);
 
 		// NEW: Enqueue Compiled Tailwind CSS
 		wp_enqueue_style(
 			'my-plugin-tailwind',
-			PLUGIN_STARTER_URL . 'build/index.css',
+			PLUGIN_STARTER_PRO_URL . 'build/index.css',
 			array(),
 		);
 
