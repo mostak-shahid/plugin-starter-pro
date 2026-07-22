@@ -1,17 +1,5 @@
 import { useState, useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
-<<<<<<< Updated upstream
-import { useCallback, useEffect, useState } from '@wordpress/element';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Solid icons
-import { faHome, faChartColumn, faUsers } from '@fortawesome/free-solid-svg-icons'; 
-// Brand icons
-import { faWordpress } from '@fortawesome/free-brands-svg-icons'; 
-
-
-// Usage:
-// <FontAwesomeRating rating={rating} />
-=======
 import apiFetch from "@wordpress/api-fetch";
 import { useCallback } from '@wordpress/element';
 import {Button, Badge, ProgressBar} from 'react-bootstrap';
@@ -60,7 +48,6 @@ const FontAwesomeRating = ({ rating }) => {
         </div>
     );
 };
->>>>>>> Stashed changes
 export default function PluginCard(plugin) {
     const { image, name, short_description, author, plugin_source = 'internal', plugin_slug = '', plugin_file = '', download_url = '', version = '1.0.0', rating = '0', num_ratings = '0', active_installs = '0', tested } = plugin;
     /*
@@ -219,16 +206,10 @@ export default function PluginCard(plugin) {
                     <a className="plugin-title mb-1" href={`https://wordpress.org/plugins/${plugin_slug}/`} target="_blank"><h6 className="h6" style={{ fontSize: 18, marginBottom: 0 }} >{name}</h6></a>
                     <div className="d-flex align-items-center gap-2">
                         {/* <Rating allowHalf defaultValue={(rating/20).toFixed(2)} disabled/>    */}
-<<<<<<< Updated upstream
-                        {(rating/20).toFixed(2)}
-                        <span>({num_ratings})</span>
-                    </div> 
-=======
                         {/* <BootstrapProgressRating rating={rating} /> */}
                         <FontAwesomeRating rating={rating} />
                         <span className="text-muted small">({num_ratings})</span>
                     </div>
->>>>>>> Stashed changes
                 </div>
             </div>
             <div className="action-button mt-2">
@@ -244,24 +225,12 @@ export default function PluginCard(plugin) {
                 <div className="short-description">{short_description}</div>
             </div>
             <div className="d-flex justify-content-between mt-2">
-<<<<<<< Updated upstream
-                <div className="d-flex align-items-center gap-1">
-                    <FontAwesomeIcon icon={faUsers} />
-                    <span dangerouslySetInnerHTML={{__html: author}}/>
-                </div>
-                <div className="tag">{version}</div>
-            </div>
-            <div className="d-flex justify-content-between mt-1">
-                <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faChartColumn} /><span>{__(`${active_installs} ${active_installs>0?"+":""} active installations`, "plugin-starter")}</span></div>
-                <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faWordpress}/> {__(`Tested with ${tested}`, "plugin-starter")}</div>
-=======
                 <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faUsers} /><span className="plugin-authors" dangerouslySetInnerHTML={{ __html: author }} /></div>
                 <Badge bg="light" text="dark">{version}</Badge>
             </div>
             <div className="d-flex justify-content-between mt-1">
                 <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faChartColumn} /> <span>{__(`${active_installs} ${active_installs > 0 ? "+" : ""} active installations`, "plugin-starter-pro")}</span></div>
                 <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faWordpress} /><span>{__(`Tested with ${tested}`, "plugin-starter-pro")}</span></div>
->>>>>>> Stashed changes
             </div>
 
         </div>
