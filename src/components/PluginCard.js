@@ -123,9 +123,6 @@ export default function PluginCard(plugin) {
                 return __("Activate", "plugin-starter-pro");
             case "activating":
                 return __("Activating...", "plugin-starter-pro");
-            case "activated": // New state
-                return __("Installed", "plugin-starter-pro");
-
             case "activated":
                 return __("Activated", "plugin-starter-pro");
             case "error":
@@ -217,8 +214,9 @@ export default function PluginCard(plugin) {
                     variant="outline-primary" 
                     className="rounded-0"
                     onClick={handleButtonClick}
+                    disabled={pluginStatus == 'activated'}
                 >
-                    {getButtonLabel()} {pluginStatus}
+                    {getButtonLabel()}
                 </Button>
             </div>
             <div className="mt-3">
