@@ -1,8 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar as faSolidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
-import { faStar as faRegularStar } from '@fortawesome/free-regular-svg-icons';
+import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
-const FontAwesomeRating = ({ rating }) => {
+export default function FontAwesomeRating({rating}) {
     // Convert your 0-100 score to a 0-5 scale
     const numericRating = parseFloat((rating / 20).toFixed(2));
 
@@ -11,19 +9,20 @@ const FontAwesomeRating = ({ rating }) => {
             {[1, 2, 3, 4, 5].map((starIndex) => {
                 if (numericRating >= starIndex) {
                     // Full Star
-                    return <FontAwesomeIcon key={starIndex} icon={faSolidStar} />;
+                    return <FaStar key={starIndex} className="star-rating solid-full-star"  />;
                 } else if (numericRating > starIndex - 1 && numericRating < starIndex) {
                     // Half Star
-                    return <FontAwesomeIcon key={starIndex} icon={faStarHalfAlt} />;
+                    return <FaStarHalfAlt key={starIndex} className="star-rating half-full-star"  />;
                 } else {
                     // Empty Star
-                    return <FontAwesomeIcon key={starIndex} icon={faRegularStar} />;
+                    return <FaRegStar key={starIndex} className="star-rating border-full-star" />;
                 }
             })}
-            <span className="ms-1 text-muted small">{numericRating}</span>
+            <span className="d-none ms-1 text-muted small">{numericRating}</span>
         </div>
     );
 };
 
 // Usage:
 // <FontAwesomeRating rating={rating} />
+

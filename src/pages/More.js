@@ -3,8 +3,7 @@ import { Row, Col, Form, FloatingLabel, InputGroup, OverlayTrigger, Tooltip } fr
 // import { useOutletContext } from 'react-router-dom';
 import { useState, useEffect } from '@wordpress/element';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { FaQuestionCircle, FaBeer, FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 import AceEditor from "react-ace";
 // Load modes and theme
@@ -85,7 +84,7 @@ const More = () => {
                                             {settingsDetails?.more?.enable_scripts?.title}
                                             {settingsDetails?.more?.enable_scripts?.hint &&
                                                 <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.enable_scripts.hint}</Tooltip>}>
-                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                    <FaQuestionCircle className="text-muted"/>
                                                 </OverlayTrigger>
                                             }
                                         </h6>
@@ -126,6 +125,21 @@ const More = () => {
             <div className="setting-unit py-4">
                 <Row>
                     <Col lg={6}>
+                        <h6 className="h6">Icons</h6>
+                    </Col>
+
+                    <Col lg={6}>
+                        Lets go for a <FaBeer />?
+                        <br/>
+                        Stars <FaStar/>, <FaStarHalfAlt/>, <FaRegStar/> 
+                    </Col>
+
+                </Row>
+
+            </div>
+            <div className="setting-unit py-4">
+                <Row>
+                    <Col lg={6}>
                         {
                             settingsLoading
                                 ?
@@ -140,7 +154,7 @@ const More = () => {
                                             {settingsDetails?.more?.css?.title}
                                             {settingsDetails?.more?.css?.hint &&
                                                 <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.css.hint}</Tooltip>}>
-                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                    <FaQuestionCircle className="text-muted"/>
                                                 </OverlayTrigger>
                                             }
                                         </h6>
@@ -186,7 +200,7 @@ const More = () => {
                                             {settingsDetails?.more?.js?.title}
                                             {settingsDetails?.more?.js?.hint &&
                                                 <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.js.hint}</Tooltip>}>
-                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                    <FaQuestionCircle className="text-muted"/>
                                                 </OverlayTrigger>
                                             }
                                         </h6>
@@ -232,7 +246,7 @@ const More = () => {
                                             {settingsDetails?.more?.header_content?.title}
                                             {settingsDetails?.more?.header_content?.hint &&
                                                 <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.header_content.hint}</Tooltip>}>
-                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                    <FaQuestionCircle className="text-muted"/>
                                                 </OverlayTrigger>
                                             }
                                         </h6>
@@ -278,7 +292,7 @@ const More = () => {
                                             {settingsDetails?.more?.footer_content?.title}
                                             {settingsDetails?.more?.footer_content?.hint &&
                                                 <OverlayTrigger overlay={<Tooltip>{settingsDetails.more.footer_content.hint}</Tooltip>}>
-                                                    <FontAwesomeIcon icon={faQuestionCircle} />
+                                                    <FaQuestionCircle className="text-muted"/>
                                                 </OverlayTrigger>
                                             }
                                         </h6>

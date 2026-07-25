@@ -3,12 +3,9 @@ import { __ } from "@wordpress/i18n";
 import apiFetch from "@wordpress/api-fetch";
 import { useCallback } from '@wordpress/element';
 import {Button, Badge, ProgressBar} from 'react-bootstrap';
-// import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
+import { FaStar, FaStarHalfAlt, FaRegStar, FaChartBar, FaUsers, FaWordpress } from "react-icons/fa";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { faStarHalfStroke, faStar, faChartColumn, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faWordpress } from '@fortawesome/free-brands-svg-icons';
+import FontAwesomeRating from './FontAwesomeRating';
 const BootstrapProgressRating = ({ rating }) => {
     const numericRating = parseFloat((rating / 20).toFixed(2));
     // Convert 0-5 scale to percentage (e.g., 4.5 out of 5 = 90%)
@@ -26,41 +23,30 @@ const BootstrapProgressRating = ({ rating }) => {
         </div>
     );
 };
-const FontAwesomeRating = ({ rating }) => {
-    // Convert your 0-100 score to a 0-5 scale
-    const numericRating = parseFloat((rating / 20).toFixed(2));
+// const FontAwesomeRating = ({ rating }) => {
+//     // Convert your 0-100 score to a 0-5 scale
+//     const numericRating = parseFloat((rating / 20).toFixed(2));
 
-    return (
-        <div className="d-flex align-items-center gap-1 text-warning" aria-label={`Rating: ${numericRating} out of 5`}>
-            {[1, 2, 3, 4, 5].map((starIndex) => {
-                if (numericRating >= starIndex) {
-                    // Full Star
-                    return <FontAwesomeIcon key={starIndex} icon={faStar} className="star-rating solid-full-star" />;
-                } else if (numericRating > starIndex - 1 && numericRating < starIndex) {
-                    // Half Star
-                    return <FontAwesomeIcon key={starIndex} icon={faStarHalfStroke} className="star-rating half-full-star" />;
-                } else {
-                    // Empty Star
-                    return <FontAwesomeIcon key={starIndex} icon={faStar} className="star-rating border-full-star"/>;
-                }
-            })}
-            <span className="d-none ms-1 text-muted small">{numericRating}</span>
-        </div>
-    );
-};
+//     return (
+//         <div className="d-flex align-items-center gap-1 text-warning" aria-label={`Rating: ${numericRating} out of 5`}>
+//             {[1, 2, 3, 4, 5].map((starIndex) => {
+//                 if (numericRating >= starIndex) {
+//                     // Full Star
+//                     return <FaStar key={starIndex} className="star-rating solid-full-star"  />;
+//                 } else if (numericRating > starIndex - 1 && numericRating < starIndex) {
+//                     // Half Star
+//                     return <FaStarHalfAlt key={starIndex} className="star-rating half-full-star"  />;
+//                 } else {
+//                     // Empty Star
+//                     return <FaRegStar key={starIndex} className="star-rating border-full-star" />;
+//                 }
+//             })}
+//             <span className="d-none ms-1 text-muted small">{numericRating}</span>
+//         </div>
+//     );
+// };
 export default function PluginCard(plugin) {
     const { image, name, short_description, author, plugin_source = 'internal', plugin_slug = '', plugin_file = '', download_url = '', version = '1.0.0', rating = '0', num_ratings = '0', active_installs = '0', tested } = plugin;
-    /*
-    data-sub_action="install_activate" 
-    data-plugin_source="external" 
-    data-download_url="https://github.com/mostak-shahid/mos-woocommerce-protected-categories/archive/refs/heads/main.zip"
-    data-plugin_slug="mos-woocommerce-protected-categories-main" 
-    data-plugin_file="mos-woocommerce-protected-categories.php" 
-
-    data-sub_action="install_activate"  
-    data-plugin_source="internal" 
-    data-plugin_slug="mos-product-specifications-tab"
-    */
     const [pluginStatus, setPluginStatus] = useState("checking");
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -83,33 +69,6 @@ export default function PluginCard(plugin) {
         };
         fetchPluginStatus();
     }, []);
-
-    // useEffect(() => {
-    //     checkPluginStatus();
-    // }, [checkPluginStatus, plugin_slug]);
-
-    const handlePlugin = async () => {
-        // setProcessing(true);     
-        // setActionError(null);   
-        // setStatus(status === 'not_active'?'activating':'installing')         
-        // try {
-        //     const result = await formDataPost('plugin_starter_ajax_install_plugins', {
-        //         sub_action:sub_action,
-        //         download_url:download_url,                
-        //         plugin_slug:plugin_slug,
-        //         plugin_file:plugin_file,
-        //         plugin_source:plugin_source,
-        //     }); 
-        //     console.log("Result:", result); // check structure here
-        //     setStatus(result.data)
-        // } catch (error) {
-        //     setActionError(error.message);
-        // } finally {
-        //     setProcessing(false);
-        //     // setStatus(status === 'activating'?'active':'not_active') 
-        // }
-    };
-
 
     const getButtonLabel = () => {
         switch (pluginStatus) {
@@ -138,9 +97,6 @@ export default function PluginCard(plugin) {
                 break;
             case "deactivated":
                 activatePlugin();
-                break;
-            case "error":
-                checkPluginStatus();
                 break;
             default:
                 break;
@@ -187,7 +143,7 @@ export default function PluginCard(plugin) {
             setErrorMessage(error.message);
         } 
     };
-    const isButtonDisabled = ["checking", "installing", "activating", "installation_complete"].includes(
+    const isButtonDisabled = ["checking", "installing", "activating", "activated"].includes(
         pluginStatus,
     );
     return (
@@ -214,7 +170,7 @@ export default function PluginCard(plugin) {
                     variant="outline-primary" 
                     className="rounded-0"
                     onClick={handleButtonClick}
-                    disabled={pluginStatus == 'activated'}
+                    disabled={isButtonDisabled}
                 >
                     {getButtonLabel()}
                 </Button>
@@ -223,12 +179,12 @@ export default function PluginCard(plugin) {
                 <div className="short-description">{short_description}</div>
             </div>
             <div className="d-flex justify-content-between mt-2">
-                <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faUsers} /><span className="plugin-authors" dangerouslySetInnerHTML={{ __html: author }} /></div>
+                <div className="d-flex align-items-center gap-1"><FaUsers /><span className="plugin-authors" dangerouslySetInnerHTML={{ __html: author }} /></div>
                 <Badge bg="light" text="dark">{version}</Badge>
             </div>
             <div className="d-flex justify-content-between mt-1">
-                <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faChartColumn} /> <span>{__(`${active_installs} ${active_installs > 0 ? "+" : ""} active installations`, "plugin-starter-pro")}</span></div>
-                <div className="d-flex align-items-center gap-1"><FontAwesomeIcon icon={faWordpress} /><span>{__(`Tested with ${tested}`, "plugin-starter-pro")}</span></div>
+                <div className="d-flex align-items-center gap-1"><FaChartBar /> <span>{__(`${active_installs} ${active_installs > 0 ? "+" : ""} active installations`, "plugin-starter-pro")}</span></div>
+                <div className="d-flex align-items-center gap-1"><FaWordpress /><span>{__(`Tested with ${tested}`, "plugin-starter-pro")}</span></div>
             </div>
 
         </div>
